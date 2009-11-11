@@ -20,7 +20,14 @@ module Validatable
     #     * logic - A block that executes to perform the validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
-    def validates_each(*args)
+    def validates_each(*args, &block)
+      unless (args.last.is_a?(Hash) && args.last[:logic]) || block.nil?
+        hash = args.last if args.last.is_a?(Hash)
+        args << hash = Hash.new unless hash
+
+        hash[:logic] = block
+      end
+
       add_validations(args, ValidatesEach)
     end
     

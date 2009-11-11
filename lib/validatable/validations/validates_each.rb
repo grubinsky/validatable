@@ -3,7 +3,7 @@ module Validatable
     required_option :logic
   
     def valid?(instance)
-      instance.instance_eval(&logic)
+      logic.call instance, attribute.to_sym, instance.send(attribute)
       true # return true so no error is added. should look in the future at doing this different.
     end
     
